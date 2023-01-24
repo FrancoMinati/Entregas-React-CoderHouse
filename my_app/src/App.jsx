@@ -4,13 +4,13 @@ import products from '../public/products.json';
 import ItemListContainer from './components/ItemListContainer/ItemListContainer';
 import Navbar from './components/Navbar/NavBar';
 import { Route, Routes } from 'react-router-dom';
-import ItemDetail from './ItemDetail';
+import ItemDetail from './components/ItemDetail/ItemDetail';
 function App() {
 
   return (
     
     <div className="w-full overflow-hidden">
-      <Navbar logo="../images/up.png" Itemcount={0}/>
+      <Navbar logo="../public/up.png" Itemcount={0}/>
       <Routes>
         <Route path='/' element={<ItemListContainer productos={products}/>}/>
         <Route
