@@ -10,7 +10,7 @@ function App() {
   return (
     
     <div className="w-full overflow-hidden">
-      <Navbar logo="../public/up.png" Itemcount={0}/>
+      <Navbar logo="/up.png" Itemcount={0}/>
       <Routes>
         <Route path='/' element={<ItemListContainer productos={products}/>}/>
         <Route
