@@ -1,27 +1,26 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, BellIcon, MoonIcon, SunIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import CardWidget from "../CartWidget/CartWidget";
 import { Link, NavLink } from "react-router-dom";
-
 const navigation = [
-  { name: 'Hombre', href: '/category/Hombre', current: false },
-  { name: 'Mujer', href: '/category/Mujer', current: false },
-  { name: 'Electronicos', href: '/category/Electronicos', current: false },
-  { name: 'Joyeria', href: '/category/Joyeria', current: false }
+  { name: "Hombre", href: "/category/Hombre", current: false },
+  { name: "Mujer", href: "/category/Mujer", current: false },
+  { name: "Electronicos", href: "/category/Electronicos", current: false },
+  { name: "Joyeria", href: "/category/Joyeria", current: false },
 ];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
-
-const Navbar = ({ logo }) => {
+const Navbar = ({ logo,themeToggle,theme}) => {
+ 
   return (
-    <Disclosure as="nav" className="bg-gray-800">
+    <Disclosure as="nav" className={theme?"bg-slate-800 shadow-lh":"bg-zinc-50 shadow-lg"}>
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-            <div className="relative flex h-16 items-center justify-between">
+            <div className="relative flex h-20 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
                 <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
@@ -36,28 +35,38 @@ const Navbar = ({ logo }) => {
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
                   <Link to={"/"}>
-                  <img
-                    className="block h-8 w-auto lg:hidden"
-                    src={logo}
-                    alt="Your Company"
-                  />
-                  <img
-                    className="hidden h-8 w-auto lg:block"
-                    src={logo}
-                    alt="Your Company"
-                  />
+                    <img
+                      className="block h-8 w-auto lg:hidden"
+                      src={logo}
+                      alt="Your Company"
+                    />
+                    <img
+                      className="hidden h-auto w-16 lg:block"
+                      src={logo}
+                      alt="Your Company"
+                    />
                   </Link>
                 </div>
-                <div className="hidden sm:ml-6 sm:block">
-                  <div className="flex space-x-4">
+                <div className="hidden sm:ml-6 sm:block lg:flex lg:items-center">
+                  <div className="flex space-x-4 ">
                     <NavLink
                       key="Inicio"
                       to="/"
                       className={({ isActive }) =>
                         classNames(
                           isActive
-                            ? "bg-gray-900 text-white"
-                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                            ? 
+                            (theme? 
+                              "bg-slate-700 text-zinc-100 hover:text-zinc-50"
+                              :
+                              "bg-slate-400 text-zinc-100 hover:text-zinc-50 focus:text-zinc-50")
+
+                            : 
+                            (theme?
+                              "text-zinc-100 hover:bg-slate-600 hover:text-zinc-50"
+                              :
+                              "text-gray-500 hover:text-zinc-100 hover:bg-slate-400"
+                              ),
                           "rounded-md px-3 py-2 text-sm font-medium"
                         )
                       }
@@ -75,9 +84,18 @@ const Navbar = ({ logo }) => {
                           item.current = isActive;
                           return classNames(
                             item.current
-                              ? "bg-gray-900 text-white"
-                              : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                            "rounded-md px-3 py-2 text-sm font-medium"
+                            ? (theme? 
+                              "bg-slate-700 text-zinc-100 hover:text-zinc-50"
+                              :
+                              "bg-slate-400 text-zinc-100 hover:text-zinc-50 focus:text-zinc-50")
+
+                            : 
+                            (theme?
+                              "text-zinc-100 hover:bg-slate-600 hover:text-zinc-50"
+                              :
+                              "text-gray-500 hover:text-zinc-100 hover:bg-slate-400"
+                              ),
+                          "rounded-md px-3 py-2 text-sm font-medium"
                           );
                         }}
                         aria-current={item.current ? "page" : undefined}
@@ -88,17 +106,29 @@ const Navbar = ({ logo }) => {
                   </div>
                 </div>
               </div>
-              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0" >
                 <button
                   type="button"
-                  className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                >
+                  className={
+                    theme? 
+                    "relative rounded-full p-1 focus:ring-2 focus:outline-none focus:ring-offset-2 bg-zinc-50 text-gray-500 hover:text-gray-800 focus:ring-white  focus:ring-offset-slate-200 mr-3":
+                    "relative rounded-full p-1 focus:ring-2 focus:outline-none focus:ring-offset-2 bg-zinc-50 text-gray-500 hover:text-gray-800 focus:ring-black  focus:ring-offset-gray-800 mr-3"
+                  } >
                   <span className="sr-only">View notifications</span>
                   <BellIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
-                <CardWidget cantidad={1} />
+                <button  className={
+                  theme? 
+                  "relative rounded-full p-1 focus:ring-2 focus:outline-none focus:ring-offset-2 bg-zinc-50 text-gray-500 hover:text-gray-800 focus:ring-white  focus:ring-offset-slate-200 mr-3":
+                  "relative rounded-full p-1 focus:ring-2 focus:outline-none focus:ring-offset-2 bg-zinc-50 text-gray-500 hover:text-gray-800 focus:ring-black  focus:ring-offset-gray-800 mr-3"
+                } 
+                onClick={()=>{
+                  themeToggle(),console.log(theme)}}>
+                  {theme===true?<MoonIcon className="h-6 w-6"/>:<SunIcon className="h-6 w-6"/>}
+                  
+                </button>  
+                <CardWidget cantidad={1} theme={theme}/>
                 {/* Profile dropdown */}
-              
               </div>
             </div>
           </div>
@@ -108,10 +138,10 @@ const Navbar = ({ logo }) => {
               {navigation.map((item) => (
                 <Disclosure.Button
                   key={item.name}
-                 
                   className={classNames(
                     "block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-                  )}>
+                  )}
+                >
                   <Link to={item.href}>{item.name}</Link>
                 </Disclosure.Button>
               ))}
