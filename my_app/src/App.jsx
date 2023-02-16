@@ -21,18 +21,19 @@ function App() {
 const [products,setProducts]=useState([]);
 //Cart
 const [cart,setCart]=useState({ products: [] });
-//const itemsCollectionRef = collection(db, "items");
+const itemsCollectionRef = collection(db, "products");
 const [loading, setLoading] = useState(true);
 const [darkmode, setDarkmode] = useState(false);
 const getProducts=async ()=>{
   const querySnapshot = await getDocs(itemsCollectionRef)
-  setProducts(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  const docs = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  setProducts(docs);
+  setLoading(false);
   /*
   axios
   .get("http://localhost:3001/api/noticias/")
   .then((res)=>{
-    setProducts(res.data);
-    setLoading(false);
+    
   })*/
 }
 const getCart=async ()=>{
@@ -42,7 +43,23 @@ const getCart=async ()=>{
     total:0
   });
 };
+const saveItems=async ()=>{
+  try{
+    const productos=await axios.get("https://fakestoreapi.com/products");
+    productos.data.map(async(producto)=>{
+      const docRef=doc(db,"products",producto.id.toString());
+      const docSnap=await getDoc(docRef);
+      if(!docSnap.exists()){
+        await setDoc(docRef,producto);
+      }else{
+        console.log("element already exists");
+      }
+    });
 
+  }catch(e){
+    console.log(e.message);
+  }
+ };
 useEffect(()=>{
   getProducts();
   getCart();
