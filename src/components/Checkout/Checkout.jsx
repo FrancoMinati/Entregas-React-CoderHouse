@@ -2,21 +2,18 @@ import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { CartContext, ThemeContext } from "../../App";
 import { collection, addDoc } from "firebase/firestore";
-
-const Checkout = ({ db }) => {
+import {db} from "../../../db/dbConfig.js";
+const Checkout = () => {
   let [cart, setCart] = useContext(CartContext);
   let theme = useContext(ThemeContext);
   const [compraId, setCompraId] = useState("");
   const guardarCompra = async () => {
     const docRef = await addDoc(collection(db, "Compras"), { ...cart });
     setCompraId(docRef.id);
-    setCart({
-      userID: 1,
-      products: [],
-      total: 0,
-    });
-  };
+    setCart({...cart,products:[]});
 
+  };
+    
   return (
     <div className="flex">
       <div className=" p-4 w-6/12">

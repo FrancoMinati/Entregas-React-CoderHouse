@@ -9,7 +9,7 @@ import axios from "axios";
 import { createContext,useContext } from 'react';
 import { useEffect, useState } from 'react';
 import { collection, getDocs } from "firebase/firestore"; 
-import db from '../db/dbConfig.js';
+import {db} from '../db/dbConfig.js';
 import Checkout from './components/Checkout/Checkout';
 
 
